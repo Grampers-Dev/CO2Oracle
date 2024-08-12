@@ -37,7 +37,7 @@ In the CO2 Oracle project, specific terms and definitions pertinent to the analy
 
 ## Business Requirements
 
-As a Data Analyst at CO2 Oracle, I have been engaged by a Goverment Agenci to provide actionable insights and data-driven recommendations. The objective is to manage CO2 emissions effectively and understand how different sources contribute to the overall emissions. The client has shared the data spanning multiple years and various emission sources.
+As a Data Analyst at CO2 Oracle, I have been engaged by a Goverment Agency to provide actionable insights and data-driven recommendations. The objective is to manage CO2 emissions effectively and understand how different sources contribute to the overall emissions. The client has shared the data spanning multiple years and various emission sources.
 
 ### Understanding Emission Patterns
 
