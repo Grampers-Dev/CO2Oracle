@@ -68,31 +68,31 @@ def page_emission_prediction_body():
     # Load the cleaned dataset to get the relevant variables
     cleaned_data = pd.read_csv('outputs\datasets\cleaned\TrainSetCleaned.csv')  # Update with the correct path
 
-    # Let the user select a country
+    # Let the user select a country and year
     country = st.selectbox("Select Country", cleaned_data['Country_Original'].unique())
-    
-    # Let the user select a year, including options beyond 2020
-    year_options = list(range(cleaned_data['Year'].min(), cleaned_data['Year'].max() + 1)) + list(range(2021, 2031))
-    year = st.selectbox("Select Year", year_options)
+    year = st.selectbox("Select Year", cleaned_data['Year'].unique())
 
-    if year <= cleaned_data['Year'].max():
-        # Use the existing data if the year is in the dataset
-        filtered_data = cleaned_data[(cleaned_data['Country_Original'] == country) & (cleaned_data['Year'] == year)]
-        if filtered_data.empty:
-            st.warning(f"No data available for {country} in {year}. Please select a different combination.")
-            return
-    else:
-        # Allow the user to input new data if the year is beyond the dataset
-        st.write(f"Enter values for {country} in {year}:")
-        coal = st.number_input("Enter value for Coal", value=0.0)
-        oil = st.number_input("Enter value for Oil", value=0.0)
-        gas = st.number_input("Enter value for Gas", value=0.0)
-        cement = st.number_input("Enter value for Cement", value=0.0)
-        flaring = st.number_input("Enter value for Flaring", value=0.0)
-        other = st.number_input("Enter value for Other", value=0.0)
-        cumulative_total = coal + oil + gas + cement + flaring + other
+    # Filter the dataset based on user selection
+    filtered_data = cleaned_data[(cleaned_data['Country_Original'] == country) & (cleaned_data['Year'] == year)]
 
-    st.write(f"The calculated **Cumulative_Total** for {country} in {year} is: {cumulative_total}")
+    if filtered_data.empty:
+        st.warning(f"No data available for {country} in {year}. Please select a different combination.")
+        return
+
+    st.write(f"Selected data for {country} in {year}:")
+
+    # Input widgets for user to enter values for the individual emission sources
+    coal = st.number_input("Enter value for Coal", value=float(filtered_data['Coal'].values[0]))
+    oil = st.number_input("Enter value for Oil", value=float(filtered_data['Oil'].values[0]))
+    gas = st.number_input("Enter value for Gas", value=float(filtered_data['Gas'].values[0]))
+    cement = st.number_input("Enter value for Cement", value=float(filtered_data['Cement'].values[0]))
+    flaring = st.number_input("Enter value for Flaring", value=float(filtered_data['Flaring'].values[0]))
+    other = st.number_input("Enter value for Other", value=float(filtered_data['Other'].values[0]))
+
+    # Calculate the cumulative total based on user inputs
+    cumulative_total = coal + oil + gas + cement + flaring + other
+
+    st.write(f"The calculated **Cumulative_Total** based on your input is: {cumulative_total}")
 
     # Convert the calculated cumulative total into a DataFrame
     input_data = pd.DataFrame({'Cumulative_Total': [cumulative_total]})
