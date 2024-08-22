@@ -15,7 +15,6 @@ The dataset is sourced from [Kaggle](https://www.kaggle.com/datasets/thedevastat
 - **Temporal Data:** Yearly data capturing the changes in CO2 emissions over time.
 - **Geographical Data:** Information on the country where the emissions were recorded.
 
-
 | Variable          | Meaning                                                        | Units                                                                               |
 |-------------------|----------------------------------------------------------------|-------------------------------------------------------------------------------------|
 | Country           | Country where CO2 emissions are recorded                       | Country name                                                                        |
@@ -206,3 +205,66 @@ I aim to develop an ML model to cluster similar emission sources based on their 
 - **Model Output**: A categorical variable representing cluster membership, appended to the dataset.
 - **Current Approach**: No existing method to group similar emission sources.
 - **Training Data**: Historical data on CO2 emissions, excluding non-predictive variables like unique identifiers and emissions totals.
+
+## Deployment
+
+This project was deployed to [Heroku](https://heroku.com/) using the following steps:
+
+1. Log in to Heroku and create an App
+2. At the Deploy tab, select GitHub as the deployment method.
+3. Select your repository name and click Search. Once it is found, click Connect.
+4. Select the branch you want to deploy, then click Deploy Branch.
+5. The deployment process should happen smoothly if all deployment files are fully functional. Click now the button Open App on the top of the page to access your App.
+
+### Heroku
+
+- The App live link is: `https://YOUR_APP_NAME.herokuapp.com/`
+- Set the runtime.txt Python version to a [Heroku-20](https://devcenter.heroku.com/articles/python-support#supported-runtimes) stack currently supported version.
+- The project was deployed to Heroku using the following steps.
+
+1. Log in to Heroku and create an App
+2. At the Deploy tab, select GitHub as the deployment method.
+3. Select your repository name and click Search. Once it is found, click Connect.
+4. Select the branch you want to deploy, then click Deploy Branch.
+5. The deployment process should happen smoothly if all deployment files are fully functional. Click the button Open App on the top of the page to access your App.
+
+## Main Data Analysis and Machine Learning Libraries
+
+- Numpy:
+For efficient calculations on large datasets, particularly pixel data.
+Normalizing pixel data.
+Calculating means and standard deviations.
+Serving as a foundation for other data analysis and machine learning libraries.
+
+- Pandas:
+Utilized mainly for managing data with pandas DataFrames.
+
+- Matplotlib & Seaborn:
+Used for data visualization, including plotting and displaying images from pixel data.
+Generating metric plots and histograms.
+
+- Main Machine Learning libraries used:
+
+- Scikit Learn:
+Utilized for hyperparameter optimization through GridSearchCV.
+
+## Run locally
+
+This repo covers the entire process of creating a ML model. From collecting and processing the data, to conducting hyperparameter optimization, data augmentation, defining and training the model on the data.
+
+__To use this repo, follow these steps:__
+
+1. Fork or clone this repository
+2. Install dependencies by running:
+	```bash
+	pip install -r "requirements-dev.txt"
+	```
+3. Register an account with [Kaggle](https://www.kaggle.com/) and create a new API token, download the kaggle.json and place it in the projects root directory.
+4. Run the notebooks in the jupyter_notebooks folder in the specified order.
+	- __DataCollection.ipynb:__ Downloads the dataset and extracts specified number of images.
+	- __DataVisualization.ipynb:__ Conducts studies on the data and saves insightful plots.
+	- __Model.ipynb:__ Prepares data, performs data augmentation and hyperparameter optimization, defines model architecture, trains, evaluates and saves a ML model.
+5. Start the web app by running:
+	```bash
+	streamlit run Home.py
+	```
