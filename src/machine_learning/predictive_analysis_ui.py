@@ -1,22 +1,22 @@
 import streamlit as st
 
-def predict_co2(X_live, co2_features, co2_pipeline_dc_fe, co2_pipeline_model):
-
+def predict_co2_emission(X_live, co2_features, data_cleaning_pipeline, regression_pipeline_model):
     # Subset features related to this pipeline from live data
     X_live_co2 = X_live.filter(co2_features)
+    st.write("Filtered features for prediction:", X_live_co2.columns.tolist())
+
+    if X_live_co2.shape[1] == 0:
+        st.error("No features selected for prediction. Please check the feature selection.")
+        return None
 
     # Apply data cleaning / feature engineering pipeline to live data
-    X_live_co2_dc_fe = co2_pipeline_dc_fe.transform(X_live_co2)
+    X_live_co2_dc_fe = data_cleaning_pipeline.transform(X_live_co2)
 
     # Predict CO2 emissions
-    co2_prediction = co2_pipeline_model.predict(X_live_co2_dc_fe)
-    
-    # Display the prediction results
-    statement = (
-        f'### The predicted CO2 emission is **{co2_prediction[0]:.2f}** units.')
-    
-    st.write(statement)
+    co2_prediction = regression_pipeline_model.predict(X_live_co2_dc_fe)
 
+    # Display the prediction results
+    st.write(f'### The predicted CO2 emission is **{co2_prediction[0]:.2f}** units.')
     return co2_prediction
 
 def predict_sector_co2(X_live, sector_features, sector_pipeline, sector_labels_map):
@@ -71,3 +71,4 @@ def predict_cluster(X_live, cluster_features, cluster_pipeline, cluster_profile)
     cluster_profile.index = [" "] * len(cluster_profile)
     # Display the cluster profile in a table
     st.table(cluster_profile)
+
