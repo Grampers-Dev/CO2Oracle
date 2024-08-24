@@ -7,7 +7,7 @@ def page_emission_analysis_body():
     st.title("CO2 Emission Analysis")
 
     # Load the dataset
-    df = pd.read_csv('outputs\datasets\collection\Co2Emissions.csv')
+    df = pd.read_csv('outputs\datasets\cleaned\TrainSetCleaned.csv')
 
     df.columns = df.columns.str.strip()
 
