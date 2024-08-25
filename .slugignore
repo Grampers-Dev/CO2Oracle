@@ -11,8 +11,14 @@ app_pages/__pycache__/*
 
 # Exclude all Jupyter notebooks
 jupyter_notebooks/*.ipynb
-
-
+*.pyc
+__pycache__/
+.cache/
+.DS_Store
+node_modules/
+dist/
+build/
+.vscode/
 .gitpod.yml
 README.md
 USERSTORYS.md
