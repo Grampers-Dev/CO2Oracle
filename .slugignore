@@ -3,10 +3,7 @@
 # Exclude the virtual environment directory
 .venv/
 
-app_pages/__pycache__/*
 
-# Exclude Jupyter notebooks
-*.ipynb
 
 
 
