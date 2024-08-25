@@ -10,7 +10,6 @@ streamlit
 feature-engine
 imbalanced-learn
 scikit-learn
-xgboost
 yellowbrick
 Jinja2
 MarkupSafe
