@@ -1,0 +1,31 @@
+# Exclude raw datasets
+inputs/datasets/raw/
+
+# Include specific data files (if needed)
+!inputs/datasets/raw/GCB2022v27_MtCO2_flat.csv
+!inputs/datasets/raw/GCB2022v27_percapita_flat.csv
+!inputs/datasets/raw/GCB2022v27_sources_flat.csv
+
+# Exclude metadata and PDF files
+inputs/datasets/raw/*.json
+inputs/datasets/raw/*.pdf
+
+# Include only the necessary Jupyter notebooks
+!jupyter_notebooks/01 - DataCollection.ipynb
+!jupyter_notebooks/02 - Understanding CO2 Emission Patterns.ipynb
+!jupyter_notebooks/03 - DataCleaning.ipynb
+!jupyter_notebooks/04 - FeatureEngineering.ipynb
+!jupyter_notebooks/05 - Modeling and Evaluation - Predict Co2.ipynb
+!jupyter_notebooks/06 - CO2 Emissions Classification Model.ipynb
+!jupyter_notebooks/07 - Modeling and Evaluation - Cluster Sklearn.ipynb
+
+# Exclude outputs folder if it is not necessary for deployment
+outputs/
+
+# Include README file
+!README.md
+
+# Exclude Python cache files
+__pycache__/
+app_pages/__pycache__/
+.
