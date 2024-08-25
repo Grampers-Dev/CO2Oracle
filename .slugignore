@@ -20,6 +20,11 @@ dist/
 build/
 .vscode/
 .gitpod.yml
+*.csv
+*.json
+*.h5
+*.zip
+tests/
 README.md
 USERSTORYS.md
 
