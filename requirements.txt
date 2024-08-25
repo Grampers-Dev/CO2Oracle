@@ -11,9 +11,7 @@ feature-engine
 imbalanced-learn
 scikit-learn
 yellowbrick
-Jinja2
-MarkupSafe
-protobuf
+
 ipywidgets
 altair
 nbformat>=4.2.0
