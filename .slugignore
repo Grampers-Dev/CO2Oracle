@@ -6,14 +6,8 @@
 
 
 
-# Include only the necessary Jupyter notebooks
-!jupyter_notebooks/01 - DataCollection.ipynb
-!jupyter_notebooks/02 - Understanding CO2 Emission Patterns.ipynb
-!jupyter_notebooks/03 - DataCleaning.ipynb
-!jupyter_notebooks/04 - FeatureEngineering.ipynb
-!jupyter_notebooks/05 - Modeling and Evaluation - Predict Co2.ipynb
-!jupyter_notebooks/06 - CO2 Emissions Classification Model.ipynb
-!jupyter_notebooks/07 - Modeling and Evaluation - Cluster Sklearn.ipynb
+# Exclude all Jupyter notebooks
+jupyter_notebooks/*.ipynb
 
 
 
