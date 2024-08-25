@@ -7,6 +7,8 @@
 # Exclude the virtual environment directory
 .venv/
 
+app_pages/__pycache__/*
+
 # Exclude all Jupyter notebooks
 jupyter_notebooks/*.ipynb
 
