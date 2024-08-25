@@ -9,6 +9,12 @@ inputs/datasets/raw/GCB2022v27_sources_flat.csv
 
 app_pages/__pycache__/*
 
+# Exclude Jupyter notebooks
+*.ipynb
+
+# Exclude dataset files
+inputs/datasets/raw/*
+
 # Exclude all Jupyter notebooks
 jupyter_notebooks/*.ipynb
 *.pyc
