@@ -8,23 +8,12 @@ app_pages/__pycache__/*
 # Exclude Jupyter notebooks
 *.ipynb
 
-# Exclude dataset files
-inputs/datasets/raw/*
 
-*.pyc
+
 __pycache__/
-.cache/
-.DS_Store
 node_modules/
-dist/
-build/
 .vscode/
-.gitpod.yml
-*.csv
-*.json
-*.h5
-*.zip
-tests/
+
 README.md
 USERSTORYS.md
 
