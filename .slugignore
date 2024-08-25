@@ -10,9 +10,6 @@ app_pages/__pycache__/*
 
 
 
-__pycache__/
-node_modules/
-.vscode/
 
 README.md
 USERSTORYS.md
