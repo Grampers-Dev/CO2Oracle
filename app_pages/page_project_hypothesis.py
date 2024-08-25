@@ -8,7 +8,7 @@ def page_project_hypothesis_body():
     **Hypothesis:** CO2 emissions from various sources have been increasing over the years.
 
     **Validation Approach:** 
-    - i conducted a **correlation study** using both **Spearman** and **Pearson** methods to investigate the relationship between 'Year' and CO2 emissions from different sources, including:
+    - I conducted a **correlation study** using both **Spearman** and **Pearson** methods to investigate the relationship between 'Year' and CO2 emissions from different sources, including:
         - 🟦 Coal
         - 🟧 Oil
         - 🟨 Gas
