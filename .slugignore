@@ -1,8 +1,4 @@
 
-# Exclude specific data files (if needed)
-inputs/datasets/raw/GCB2022v27_MtCO2_flat.csv
-inputs/datasets/raw/GCB2022v27_percapita_flat.csv
-inputs/datasets/raw/GCB2022v27_sources_flat.csv
 
 # Exclude the virtual environment directory
 .venv/
@@ -15,8 +11,6 @@ app_pages/__pycache__/*
 # Exclude dataset files
 inputs/datasets/raw/*
 
-# Exclude all Jupyter notebooks
-jupyter_notebooks/*.ipynb
 *.pyc
 __pycache__/
 .cache/
