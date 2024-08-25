@@ -1,104 +1,102 @@
 import streamlit as st
 import pandas as pd
-from src.data_management import load_co2_data, load_pkl_file
-from src.machine_learning.predictive_analysis_ui import (
-    predict_co2_emission,
-    predict_cluster)
+import numpy as np
+import plotly.express as px
+import seaborn as sns
+import matplotlib.pyplot as plt
+from feature_engine.discretisation import ArbitraryDiscretiser
 
-def page_co2_predictor():
+sns.set_style("whitegrid")
 
-    # load CO2 prediction files
-    version = 'v1'
-    co2_pipe_dc_fe = load_pkl_file(
-        f'outputs/ml_pipeline/predict_co2/{version}/reg_pipeline_data_cleaning_feat_eng.pkl')
-    co2_pipe_model = load_pkl_file(
-        f"outputs/ml_pipeline/predict_co2/{version}/reg_pipeline_model.pkl")
-    co2_features = (pd.read_csv(f"outputs/ml_pipeline/predict_co2/{version}/X_train.csv")
-                      .columns
-                      .to_list()
-                      )
+def page_co2_predictor_body():
+    # Load CO2 emissions data
+    # Define the load_co2_data() function or import it from another module
+    def load_co2_data():
+        # implementation goes here
+        pass
 
-#    # load cluster analysis files
-#    version = 'v1'
-#    cluster_pipe = load_pkl_file(
-#        f"outputs/ml_pipeline/cluster_analysis/{version}/cluster_pipeline.pkl")
-#    cluster_features = (pd.read_csv(f"outputs/ml_pipeline/cluster_analysis/{version}/TrainSet.csv")
-#                        .columns
-#                        .to_list()
-#                        )
-#    cluster_profile = pd.read_csv(
-#        f"outputs/ml_pipeline/cluster_analysis/{version}/clusters_profile.csv")
+    df = load_co2_data()
 
-    st.write("### CO2 Emissions Predictor Interface")
+    # Define variables of interest
+    vars_to_study = ['Year', 'Coal', 'Oil', 'Gas', 'Cement']
+
+    st.write("### CO2 Emissions Analysis")
     st.info(
-        f"* This interface allows you to predict CO2 emissions based on various input factors. "
-        f"You can also determine which cluster the input data falls into and make informed decisions based on the results."
+        f"* This study aims to understand the patterns of CO2 emissions from various sources. "
+        f"By exploring these patterns, we can identify the most influential variables contributing "
+        f"to changes in CO2 emissions over time."
     )
+
+    # Inspect data
+    if st.checkbox("Inspect CO2 Emissions Data"):
+        st.write(
+            f"* The dataset contains {df.shape[0]} records and {df.shape[1]} columns. "
+            f"Below are the first 10 rows."
+        )
+        st.write(df.head(10))
+
     st.write("---")
 
-    # Generate Live Data
-    X_live = draw_co2_input_widgets(co2_features)
+    # Summary of Correlation Study
+    st.write(
+        f"* A correlation study was conducted to understand how variables like 'Year' and different "
+        f"emission sources are related to total CO2 emissions."
+        f"\n The most correlated variables are: **{vars_to_study}**"
+    )
 
-    # predict on live data
-    if st.button("Run Predictive Analysis"):
-        co2_prediction = predict_co2_emission(
-            X_live, co2_features, co2_pipe_dc_fe, co2_pipe_model)
+    st.info(
+        f"The following insights were derived from the correlation analysis: \n"
+        f"* Coal is a significant contributor to CO2 emissions. \n"
+        f"* Oil and Gas also play a substantial role in the emission levels. \n"
+        f"* Emissions vary significantly by year, reflecting changes in energy consumption patterns."
+    )
 
-        predict_cluster(X_live, cluster_features,
-                        cluster_pipe, cluster_profile)
+    # Variables Distribution by Year/CO2 Source
+    df_eda = df.filter(vars_to_study + ['Total'])
 
-def draw_co2_input_widgets(co2_features):
-    # load dataset
-    df = load_co2_data()
-    percentageMin, percentageMax = 0.4, 2.0
+    if st.checkbox("Explore Emissions per Variable"):
+        emissions_per_variable(df_eda)
 
-    col1, col2, col3, col4 = st.columns(4)
-
-    # create an empty DataFrame, which will be the live data
-    X_live = pd.DataFrame([], index=[0])
-
-    # Define widgets for each feature (example features, adjust based on your data)
-    with col1:
-        feature = "Coal"
-        st_widget = st.number_input(
-            label=feature,
-            min_value=df[feature].min() * percentageMin,
-            max_value=df[feature].max() * percentageMax,
-            value=df[feature].median()
+    if st.checkbox("Parallel Plot Analysis"):
+        st.write(
+            f"* Parallel plots can help visualize the relationships between different emission sources "
+            f"and total CO2 emissions."
         )
-    X_live[feature] = st_widget
+        parallel_plot_emissions(df_eda)
 
-    with col2:
-        feature = "Oil"
-        st_widget = st.number_input(
-            label=feature,
-            min_value=df[feature].min() * percentageMin,
-            max_value=df[feature].max() * percentageMax,
-            value=df[feature].median()
-        )
-    X_live[feature] = st_widget
+# Function to plot emissions by variable
+def emissions_per_variable(df_eda):
+    target_var = 'Total'
 
-    with col3:
-        feature = "Gas"
-        st_widget = st.number_input(
-            label=feature,
-            min_value=df[feature].min() * percentageMin,
-            max_value=df[feature].max() * percentageMax,
-            value=df[feature].median()
-        )
-    X_live[feature] = st_widget
+    for col in df_eda.drop([target_var], axis=1).columns.to_list():
+        if df_eda[col].dtype == 'object':
+            plot_categorical(df_eda, col, target_var)
+        else:
+            plot_numerical(df_eda, col, target_var)
 
-    with col4:
-        feature = "Cement"
-        st_widget = st.number_input(
-            label=feature,
-            min_value=df[feature].min() * percentageMin,
-            max_value=df[feature].max() * percentageMax,
-            value=df[feature].median()
-        )
-    X_live[feature] = st_widget
+# Plot categorical data
+def plot_categorical(df, col, target_var):
+    fig, axes = plt.subplots(figsize=(12, 5))
+    sns.countplot(data=df, x=col, hue=target_var, order=df[col].value_counts().index)
+    plt.xticks(rotation=90)
+    plt.title(f"{col} Distribution", fontsize=20)
+    st.pyplot(fig)
 
-    # You can add more features as necessary
+# Plot numerical data
+def plot_numerical(df, col, target_var):
+    fig, axes = plt.subplots(figsize=(8, 5))
+    sns.histplot(data=df, x=col, hue=target_var, kde=True, element="step")
+    plt.title(f"{col} Distribution", fontsize=20)
+    st.pyplot(fig)
 
-    return X_live
+# Function to create a parallel plot
+def parallel_plot_emissions(df_eda):
+    # Discretize a numerical variable for better visualization
+    tenure_map = [-np.Inf, 6, 12, 18, 24, np.Inf]
+    disc = ArbitraryDiscretiser(binning_dict={'Year': tenure_map})
+    df_parallel = disc.fit_transform(df_eda)
+
+    fig = px.parallel_categories(df_parallel, color="Total", width=750, height=500)
+    st.plotly_chart(fig)
+
 

@@ -7,7 +7,7 @@ from app_pages.page_emission_analysis import page_emission_analysis_body
 from app_pages.page_emission_classification import page_emission_classification_body
 from app_pages.page_project_hypothesis import page_project_hypothesis_body
 from app_pages.page_cluster_analysis import page_predict_co2_body
-from app_pages.page_co2_predictor import page_co2_predictor
+from app_pages.page_co2_predictor import page_co2_predictor_body
 
 # Create an instance of the app
 app = MultiPage(app_name="CO2Oracle: CO2 Emissions Analysis")
@@ -18,7 +18,7 @@ app.add_page("CO2 Emission Analysis", page_emission_analysis_body)
 app.add_page("CO2 Emission Classification", page_emission_classification_body)
 app.add_page("Project Hypothesis and Validation", page_project_hypothesis_body)
 app.add_page("ML: Cluster Analysis", page_predict_co2_body)
-app.add_page("CO2 Emissions Predictor", page_co2_predictor)
+app.add_page("CO2 Emissions Predictor", page_co2_predictor_body)
 
 
 # Run the app

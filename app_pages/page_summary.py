@@ -1,23 +1,42 @@
 import streamlit as st
 
 def page_summary_body():
-    st.title("Quick Project Summary")
-    st.write("""
-    Welcome to the CO2Oracle project! This project aims to analyze and predict CO2 emissions from various sources across different countries.
+    st.title("🌍 CO2Oracle Project Summary")
     
-    ### Project Objectives:
-    - Understand the patterns and correlations in CO2 emissions data.
-    - Predict whether CO2 emissions will increase or decrease in the future.
-    - Segment emission sources into meaningful clusters for better management.
-
-    ### Data Overview:
-    - The dataset includes emissions data from sources like Cement, Coal, Gas, Oil, Flaring, and Other sources.
-    - Geographical data covers multiple countries over several years.
-    - Temporal data captures changes in CO2 emissions over time.
-
-    ### Next Steps:
-    - Explore the CO2 Emission Analysis page to see how different sources contribute to emissions.
-    - Check out the CO2 Emission Prediction page to see our predictive models in action.
-    - Learn about our hypotheses and their validation under the Project Hypothesis page.
-    - Understand how different emission sources are grouped in the ML: Cluster Analysis page.
+    st.markdown("""
+    Welcome to the **CO2Oracle** project! This initiative focuses on analyzing and predicting CO2 emissions from various sources across different countries, aiming to provide actionable insights for better environmental management.
     """)
+    
+    st.markdown("### 🎯 **Project Objectives**")
+    st.markdown("""
+    - 📊 **Understand patterns and correlations** in CO2 emissions data.
+    - 🔮 **Predict future CO2 emissions** trends (increase or decrease).
+    - 🔍 **Segment emission sources** into meaningful clusters for targeted management.
+    """)
+    
+    st.markdown("### 📈 **Data Overview**")
+    st.markdown("""
+    - **Emission Sources**: Data includes emissions from Cement, Coal, Gas, Oil, Flaring, and other sources.
+    - **Geographical Data**: The dataset covers multiple countries across several years.
+    - **Temporal Data**: Captures changes in CO2 emissions over time, providing insights into trends and patterns.
+    """)
+    
+    st.markdown("---")
+    
+    st.markdown("### 🚀 **Next Steps**")
+    st.markdown("""
+    - 🔍 **Explore** the [CO2 Emission Analysis](#) page to see how different sources contribute to overall emissions.
+    - 🔮 **Check out** the [CO2 Emission Prediction](#) page to see our predictive models in action.
+    - 🧠 **Learn about** our hypotheses and their validation under the [Project Hypothesis](#) page.
+    - 📊 **Understand** how different emission sources are grouped in the [ML: Cluster Analysis](#) page.
+    """)
+    
+    st.markdown("---")
+    
+    st.markdown("""
+    We hope this project provides valuable insights to help in the global effort to manage and reduce CO2 emissions.
+    """)
+
+# Call the function to render the page
+page_summary_body()
+
