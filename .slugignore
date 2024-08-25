@@ -13,8 +13,7 @@ app_pages/__pycache__/*
 jupyter_notebooks/*.ipynb
 
 
-
-# Include README file
-!README.md
+.gitpod.yml
+README.md
 
 
