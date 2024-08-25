@@ -4,7 +4,8 @@
 !inputs/datasets/raw/GCB2022v27_percapita_flat.csv
 !inputs/datasets/raw/GCB2022v27_sources_flat.csv
 
-
+# Exclude the virtual environment directory
+.venv/
 
 # Exclude all Jupyter notebooks
 jupyter_notebooks/*.ipynb
