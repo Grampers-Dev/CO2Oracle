@@ -1,8 +1,8 @@
 
-# Include specific data files (if needed)
-!inputs/datasets/raw/GCB2022v27_MtCO2_flat.csv
-!inputs/datasets/raw/GCB2022v27_percapita_flat.csv
-!inputs/datasets/raw/GCB2022v27_sources_flat.csv
+# Exclude specific data files (if needed)
+inputs/datasets/raw/GCB2022v27_MtCO2_flat.csv
+inputs/datasets/raw/GCB2022v27_percapita_flat.csv
+inputs/datasets/raw/GCB2022v27_sources_flat.csv
 
 # Exclude the virtual environment directory
 .venv/
@@ -15,5 +15,6 @@ jupyter_notebooks/*.ipynb
 
 .gitpod.yml
 README.md
+USERSTORYS.md
 
 
