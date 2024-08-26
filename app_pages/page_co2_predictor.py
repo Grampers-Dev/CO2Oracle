@@ -1,102 +1,179 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import plotly.express as px
-import seaborn as sns
-import matplotlib.pyplot as plt
-from feature_engine.discretisation import ArbitraryDiscretiser
+from joblib import load
 
-sns.set_style("whitegrid")
+def page_predict_co2_body():
+    version = 'v1'
+    
+    # Load the cleaned training set
+    cleaned_train_set = pd.read_csv(f"outputs/datasets/cleaned/TrainSetCleaned.csv")
+    
+    # Load the trained regression model pipeline
+    regression_pipeline_model = load(f"outputs/ml_pipeline/predict_co2/{version}/reg_pipeline_model.pkl")
+    
+    st.title("🔍 Predict CO2 Emissions")
 
-def page_co2_predictor_body():
-    # Load CO2 emissions data
-    # Define the load_co2_data() function or import it from another module
-    def load_co2_data():
-        # implementation goes here
-        pass
+    # Country selection
+    st.markdown("### 🌍 Select Country")
+    country_list = cleaned_train_set['Country'].unique()
+    selected_country = st.selectbox("Select Country", options=country_list)
+    
+    # Display data for the selected country
+    country_data = cleaned_train_set[cleaned_train_set['Country'] == selected_country]
+    st.markdown(f"### 📊 Data for {selected_country}")
+    st.dataframe(country_data)
 
-    df = load_co2_data()
+    # Show pipelines
+    st.markdown("---")
+    st.markdown("### ⚙️ The ML Pipeline")
+    st.markdown("The machine learning pipeline used for prediction consists of one main step: the regression model.")
+    st.write(regression_pipeline_model)
 
-    # Define variables of interest
-    vars_to_study = ['Year', 'Coal', 'Oil', 'Gas', 'Cement']
+    # Explanation of Feature Engineering
+    st.markdown("---")
+    st.markdown("### 🧠 Explanation of Feature Engineering")
+    st.info("""
+    Several advanced features were created to improve prediction accuracy:
 
-    st.write("### CO2 Emissions Analysis")
-    st.info(
-        f"* This study aims to understand the patterns of CO2 emissions from various sources. "
-        f"By exploring these patterns, we can identify the most influential variables contributing "
-        f"to changes in CO2 emissions over time."
-    )
+    - **Lag Features:** Capture trends based on past CO2 emissions.
+    - **Rolling Statistics:** Analyze average emissions and their variability over time.
+    - **Cumulative Total:** Track the total historical emissions for each country.
+    - **Interaction Terms:** Understand the combined effects of different emission sources.
+    - **Year-on-Year Change:** Measure how much emissions have changed year over year.
+    - **Proportional Features:** Assess the share of emissions coming from specific sources.
+    
+    These transformations were manually applied, so the data is preprocessed and ready for the model.
+    """)
 
-    # Inspect data
-    if st.checkbox("Inspect CO2 Emissions Data"):
-        st.write(
-            f"* The dataset contains {df.shape[0]} records and {df.shape[1]} columns. "
-            f"Below are the first 10 rows."
-        )
-        st.write(df.head(10))
+    # Calculator for Total_Rolling_Std
+    st.markdown("---")
+    st.markdown("### 📐 Calculate Total_Rolling_Std")
+    st.info("Use this calculator to estimate the variability of CO2 emissions over the last 3 years.")
 
-    st.write("---")
+    # User inputs for the years
+    emission_2018 = st.number_input("Enter CO2 emissions for 2018", min_value=0.0, step=0.01)
+    emission_2019 = st.number_input("Enter CO2 emissions for 2019", min_value=0.0, step=0.01)
+    emission_2021 = st.number_input("Enter CO2 emissions for 2021", min_value=0.0, step=0.01)
 
-    # Summary of Correlation Study
-    st.write(
-        f"* A correlation study was conducted to understand how variables like 'Year' and different "
-        f"emission sources are related to total CO2 emissions."
-        f"\n The most correlated variables are: **{vars_to_study}**"
-    )
+    if st.button("Calculate Total_Rolling_Std"):
+        # Calculate mean emissions
+        mean_emissions = np.mean([emission_2018, emission_2019, emission_2021])
 
-    st.info(
-        f"The following insights were derived from the correlation analysis: \n"
-        f"* Coal is a significant contributor to CO2 emissions. \n"
-        f"* Oil and Gas also play a substantial role in the emission levels. \n"
-        f"* Emissions vary significantly by year, reflecting changes in energy consumption patterns."
-    )
+        # Calculate the differences from the mean and square them
+        squared_diffs = [
+            (emission_2018 - mean_emissions) ** 2,
+            (emission_2019 - mean_emissions) ** 2,
+            (emission_2021 - mean_emissions) ** 2
+        ]
 
-    # Variables Distribution by Year/CO2 Source
-    df_eda = df.filter(vars_to_study + ['Total'])
+        # Calculate the mean of squared differences
+        mean_squared_diffs = np.mean(squared_diffs)
 
-    if st.checkbox("Explore Emissions per Variable"):
-        emissions_per_variable(df_eda)
+        # Calculate the standard deviation (Total_Rolling_Std)
+        total_rolling_std = np.sqrt(mean_squared_diffs)
 
-    if st.checkbox("Parallel Plot Analysis"):
-        st.write(
-            f"* Parallel plots can help visualize the relationships between different emission sources "
-            f"and total CO2 emissions."
-        )
-        parallel_plot_emissions(df_eda)
+        st.success(f"Estimated Total_Rolling_Std: **{total_rolling_std:.3f}**")
 
-# Function to plot emissions by variable
-def emissions_per_variable(df_eda):
-    target_var = 'Total'
+    # Explanation of Input Features
+    st.markdown("---")
+    st.markdown("### 📝 Explanation of Input Features")
+    explanation_data = {
+        "Feature": [
+            "Total_Lag1", "Total_Lag2", "Total_Lag3", 
+            "Total_Rolling_Mean", "Total_Rolling_Std", 
+            "Cumulative_Total", "Coal_Gas_Interaction", 
+            "Oil_Flaring_Interaction", "Year_on_Year_Change", 
+            "Coal_Percentage", "Gas_Percentage", 
+            "Oil_Percentage", "Flaring_Percentage"
+        ],
+        "Description": [
+            "CO2 emissions from the previous year. Captures recent trends.",
+            "CO2 emissions from two years ago. Adds historical context.",
+            "CO2 emissions from three years ago. Provides further historical insight.",
+            "Average CO2 emissions over the last 3 years. Shows the overall trend.",
+            "Variability of CO2 emissions over the last 3 years. Indicates stability or fluctuation.",
+            "Total CO2 emissions accumulated over time for the country.",
+            "Interaction between coal and gas emissions. Might show combined effects.",
+            "Interaction between oil and flaring emissions. Captures joint impact.",
+            "Percentage change in CO2 emissions compared to the same time last year.",
+            "Percentage of total emissions from coal. Indicates reliance on this source.",
+            "Percentage of total emissions from gas. Shows its contribution.",
+            "Percentage of total emissions from oil. Reflects its impact.",
+            "Percentage of total emissions from flaring. Represents this source's role."
+        ]
+    }
+    explanation_df = pd.DataFrame(explanation_data)
+    st.table(explanation_df)
 
-    for col in df_eda.drop([target_var], axis=1).columns.to_list():
-        if df_eda[col].dtype == 'object':
-            plot_categorical(df_eda, col, target_var)
-        else:
-            plot_numerical(df_eda, col, target_var)
+    # User inputs for prediction
+    st.markdown("---")
+    st.markdown("### 🧮 Enter Values for Prediction")
+    input_data = {}
+    for feature in ['Total_Rolling_Std', 'Total', 'Total_Lag1', 'Year_on_Year_Change']:
+        input_data[feature] = st.number_input(f"Enter value for {feature}", min_value=0.0, step=0.01)
 
-# Plot categorical data
-def plot_categorical(df, col, target_var):
-    fig, axes = plt.subplots(figsize=(12, 5))
-    sns.countplot(data=df, x=col, hue=target_var, order=df[col].value_counts().index)
-    plt.xticks(rotation=90)
-    plt.title(f"{col} Distribution", fontsize=20)
-    st.pyplot(fig)
+    # Convert inputs to DataFrame
+    input_df = pd.DataFrame([input_data])
 
-# Plot numerical data
-def plot_numerical(df, col, target_var):
-    fig, axes = plt.subplots(figsize=(8, 5))
-    sns.histplot(data=df, x=col, hue=target_var, kde=True, element="step")
-    plt.title(f"{col} Distribution", fontsize=20)
-    st.pyplot(fig)
+    # Prediction
+    if st.button("🔮 Predict CO2 Emissions"):
+        try:
+            prediction = regression_pipeline_model.predict(input_df)
+            st.markdown(f"### 🎯 Predicted CO2 Emission Level for {selected_country}:")
+            st.success(f"The predicted CO2 emission level is **{prediction[0]:.2f} metric tons** based on your inputs:")
+            for feature in input_data:
+                st.write(f"- **{feature.replace('_', ' ')}:** {input_data[feature]}")
+            st.write("These features have been carefully engineered to provide a robust prediction for the selected country.")
+        except ValueError as e:
+            st.error(f"Error: {e}")
 
-# Function to create a parallel plot
-def parallel_plot_emissions(df_eda):
-    # Discretize a numerical variable for better visualization
-    tenure_map = [-np.Inf, 6, 12, 18, 24, np.Inf]
-    disc = ArbitraryDiscretiser(binning_dict={'Year': tenure_map})
-    df_parallel = disc.fit_transform(df_eda)
+    st.markdown("---")
 
-    fig = px.parallel_categories(df_parallel, color="Total", width=750, height=500)
-    st.plotly_chart(fig)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
 
 
