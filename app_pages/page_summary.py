@@ -25,10 +25,10 @@ def page_summary_body():
     
     st.markdown("### 🚀 **Next Steps**")
     st.markdown("""
-    - 🔍 **Explore** the [CO2 Emission Analysis](#) page to see how different sources contribute to overall emissions.
-    - 🔮 **Check out** the [CO2 Emission Prediction](#) page to see my predictive models in action.
-    - 🧠 **Learn about** my hypotheses and their validation under the [Project Hypothesis](#) page.
-    - 📊 **Understand** how different emission sources are grouped in the [ML: Cluster Analysis](#) page.
+    - 🔍 **Explore** the CO2 Emission Analysis page to see how different sources contribute to overall emissions.
+    - 🔮 **Check out** the CO2 Emission Prediction page to see my predictive models in action.
+    - 🧠 **Learn about** my hypotheses and their validation under the Project Hypothesis page.
+    - 📊 **Understand** how different emission sources are grouped in the ML: Cluster Analysis page.
     """)
     
     st.markdown("---")
