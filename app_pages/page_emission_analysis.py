@@ -10,7 +10,10 @@ def page_emission_analysis_body():
     df = pd.read_csv('outputs/datasets/cleaned/TrainSetCleaned.csv')
     df.columns = df.columns.str.strip()
 
-    # Ensure I drop all non-numeric columns, including 'Country' and 'Country_Original'
+    # Drop the 'Country' column explicitly
+    df = df.drop(columns=['Country'])
+
+    # Select only numeric columns (should exclude non-numeric ones)
     numeric_df = df.select_dtypes(include=[float, int])
 
     st.header("Dataset Overview")
@@ -48,6 +51,7 @@ def page_emission_analysis_body():
 
 # Call this function to display the analysis
 page_emission_analysis_body()
+
 
 
 
