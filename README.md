@@ -205,7 +205,23 @@ This project was deployed to [Heroku](https://heroku.com/) using the following s
 4. Select the branch you want to deploy, then click Deploy Branch.
 5. The deployment process should happen smoothly if all deployment files are fully functional. Click the button Open App on the top of the page to access your App.
 
-## 8. Main Data Analysis and Machine Learning Libraries 🛠️
+## 8. Known Issues and Bug Reports 🐛
+
+During the development and deployment of the CO2Oracle project, the following issues have been identified. Future examination and debugging will be required to address these:
+
+### 8.1 Heatmap Display Issue
+
+- **Issue:** Some numeric values do not appear in the heatmap when displayed on the Streamlit app, even though they are correctly rendered in the Jupyter Notebook environment.
+- **Possible Cause:** The exact cause is unclear but could be related to differences in how Streamlit and Jupyter handle data types or render visualizations. It's also possible that certain preprocessing steps or environmental factors (like package versions) contribute to this issue.
+- **Future Work:** Further investigation is needed to understand how Streamlit processes data and renders visualizations compared to Jupyter. This might involve revisiting data cleaning steps, ensuring that all numeric columns are properly handled, or debugging the visualization libraries (Seaborn, Matplotlib) in the Streamlit environment.
+
+### 8.2 Cluster Analysis Performance
+
+- **Issue:** The Streamlit app page that performs cluster analysis is noticeably laggy and slow to load, although it does eventually complete the operation.
+- **Possible Cause:** The performance issue likely stems from the computational intensity of the cluster analysis, especially when dealing with large datasets or complex clustering algorithms.
+- **Future Work:** Optimize the cluster analysis process by potentially simplifying the data, using more efficient algorithms, or pre-processing the data to reduce its size and complexity. Consider implementing parallel processing or other performance enhancements to make the Streamlit app more responsive and user-friendly.
+
+## 9. Main Data Analysis and Machine Learning Libraries 🛠️
 
 - **Numpy:**
   - For efficient calculations on large datasets, particularly pixel data.
@@ -220,12 +236,12 @@ This project was deployed to [Heroku](https://heroku.com/) using the following s
   - Used for data visualization, including plotting and displaying images from pixel data.
   - Generating metric plots and histograms.
 
-### 8.1 Main Machine Learning libraries used:
+### 9.1 Main Machine Learning libraries used:
 
 - **Scikit Learn:**
   - Utilized for hyperparameter optimization through GridSearchCV.
 
-## 9. Run locally 💻
+## 10. Run locally 💻
 
 This repo covers the entire process of creating a ML model. From collecting and processing the data to conducting hyperparameter optimization, data augmentation, defining, and training the model on the data.
 
@@ -245,4 +261,3 @@ __To use this repo, follow these steps:__
     ```bash
     streamlit run Home.py
     ```
-
