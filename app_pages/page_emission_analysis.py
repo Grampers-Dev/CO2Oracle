@@ -7,9 +7,15 @@ def page_emission_analysis_body():
     st.title("CO2 Emission Analysis")
 
     # Load the dataset
-    cleaned_train_set = pd.read_csv(f"outputs/datasets/cleaned/TrainSetCleaned.csv")
-
-    df.columns = df.columns.str.strip()
+    try:
+        df = pd.read_csv('outputs/datasets/cleaned/TrainSetCleaned.csv')
+        df.columns = df.columns.str.strip()
+    except FileNotFoundError:
+        st.error("The dataset file was not found.")
+        return
+    except pd.errors.EmptyDataError:
+        st.error("The dataset is empty.")
+        return
 
     st.header("Dataset Overview")
     st.write("Here is a quick glance at the dataset used for this analysis:")
@@ -37,3 +43,7 @@ def page_emission_analysis_body():
     st.write("""
     These correlation heatmaps help us understand the relationships between the different CO2 emission sources over time.
     """)
+
+# Make sure to call this function somewhere in your app
+page_emission_analysis_body()
+
