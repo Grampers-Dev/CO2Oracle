@@ -14,8 +14,17 @@ def page_emission_analysis_body():
     st.write("Here is a quick glance at the dataset used for this analysis:")
     st.write(df.head())
 
-    # Select only numeric columns for correlation analysis
+    # Debugging: Display the column types
+    st.write("### Column Data Types")
+    st.write(df.dtypes)
+
+    # Selecting only numeric columns for correlation
     numeric_df = df.select_dtypes(include=[float, int])
+
+    # Check if any numeric columns were selected
+    if numeric_df.empty:
+        st.error("No numeric columns available for correlation analysis.")
+        return
 
     st.header("Correlation Analysis")
     st.write("""
@@ -24,23 +33,17 @@ def page_emission_analysis_body():
 
     # Spearman Correlation Heatmap
     st.subheader("Spearman Correlation")
-    if numeric_df.empty:
-        st.error("No numeric columns available for correlation analysis.")
-    else:
-        corr_spearman = numeric_df.corr(method='spearman')
-        plt.figure(figsize=(10, 8))
-        sns.heatmap(corr_spearman, annot=True, cmap='coolwarm')
-        st.pyplot(plt)
+    corr_spearman = numeric_df.corr(method='spearman')
+    plt.figure(figsize=(10, 8))
+    sns.heatmap(corr_spearman, annot=True, cmap='coolwarm')
+    st.pyplot(plt)
 
     # Pearson Correlation Heatmap
     st.subheader("Pearson Correlation")
-    if numeric_df.empty:
-        st.error("No numeric columns available for correlation analysis.")
-    else:
-        corr_pearson = numeric_df.corr(method='pearson')
-        plt.figure(figsize=(10, 8))
-        sns.heatmap(corr_pearson, annot=True, cmap='coolwarm')
-        st.pyplot(plt)
+    corr_pearson = numeric_df.corr(method='pearson')
+    plt.figure(figsize=(10, 8))
+    sns.heatmap(corr_pearson, annot=True, cmap='coolwarm')
+    st.pyplot(plt)
 
     st.write("""
     These correlation heatmaps help us understand the relationships between the different CO2 emission sources over time.
@@ -48,6 +51,7 @@ def page_emission_analysis_body():
 
 # Make sure to call this function in your app
 page_emission_analysis_body()
+
 
 
 
