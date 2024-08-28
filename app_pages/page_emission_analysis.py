@@ -10,21 +10,15 @@ def page_emission_analysis_body():
     df = pd.read_csv('outputs/datasets/cleaned/TrainSetCleaned.csv')
     df.columns = df.columns.str.strip()
 
+    # Ensure the Year is correctly formatted
+    df['Year'] = df['Year'].str.replace(',', '').astype(int)
+
+    # Drop the 'Country' column for correlation
+    numeric_df = df.drop(columns=['Country'])
+
     st.header("Dataset Overview")
     st.write("Here is a quick glance at the dataset used for this analysis:")
     st.write(df.head())
-
-    # Debugging: Display the column types
-    st.write("### Column Data Types")
-    st.write(df.dtypes)
-
-    # Selecting only numeric columns for correlation
-    numeric_df = df.select_dtypes(include=[float, int])
-
-    # Check if any numeric columns were selected
-    if numeric_df.empty:
-        st.error("No numeric columns available for correlation analysis.")
-        return
 
     st.header("Correlation Analysis")
     st.write("""
@@ -49,8 +43,9 @@ def page_emission_analysis_body():
     These correlation heatmaps help us understand the relationships between the different CO2 emission sources over time.
     """)
 
-# Make sure to call this function in your app
+# Call this function to display the analysis
 page_emission_analysis_body()
+
 
 
 
