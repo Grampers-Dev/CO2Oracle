@@ -10,9 +10,6 @@ def page_emission_analysis_body():
     df = pd.read_csv('outputs/datasets/cleaned/TrainSetCleaned.csv')
     df.columns = df.columns.str.strip()
 
-    # Ensure the Year is correctly formatted
-    df['Year'] = df['Year'].str.replace(',', '').astype(int)
-
     # Drop the 'Country' column for correlation
     numeric_df = df.drop(columns=['Country'])
 
